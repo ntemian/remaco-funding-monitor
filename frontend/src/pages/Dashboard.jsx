@@ -57,6 +57,26 @@ function Dashboard() {
         </button>
       </div>
 
+      <div className="card" style={{ marginBottom: 24, background: 'linear-gradient(135deg, #0a1a3a 0%, #0d2d5e 100%)', color: '#fff', border: 'none' }}>
+        <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+          <div style={{ flex: 1 }}>
+            <h3 style={{ color: '#fff', fontSize: 18, marginBottom: 8 }}>REMACO Funding Monitor</h3>
+            <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, lineHeight: 1.6 }}>
+              Automated daily scanner for EU and Greek funding opportunities. The system monitors
+              <strong style={{ color: '#6aa3ff' }}> TED</strong> (EU tenders),
+              <strong style={{ color: '#6aa3ff' }}> Funding & Tenders Portal</strong> (Horizon Europe, Digital Europe, EDF, LIFE, AMIF),
+              and Greek co-financed programmes (ESPA, Recovery Fund, Green Fund, Just Transition Fund).
+              Each call is automatically matched against your company profile to assess eligibility,
+              highlight gaps, and recommend whether to bid solo or form a consortium.
+            </p>
+          </div>
+          <div style={{ textAlign: 'center', minWidth: 100 }}>
+            <div style={{ fontSize: 40, fontWeight: 800, color: '#6aa3ff' }}>{matchStats.total}</div>
+            <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'rgba(255,255,255,0.5)' }}>Matches Assessed</div>
+          </div>
+        </div>
+      </div>
+
       <div className="card-grid">
         <div className="card stat-card">
           <div className="value">{stats.total}</div>

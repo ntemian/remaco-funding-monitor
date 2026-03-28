@@ -31,4 +31,9 @@ export const createFilter = (profileId, data) => api.post('/filters', data, { pa
 export const runPipeline = (daysBack = 1) => api.post('/pipeline/run', null, { params: { days_back: daysBack } });
 export const getPipelineStatus = () => api.get('/pipeline/status');
 
+// Feedback
+export const submitFeedback = (data) => api.post('/feedback', data);
+export const getFeedback = () => api.get('/feedback');
+export const markReviewed = (id) => api.post(`/feedback/${id}/review`);
+
 export default api;

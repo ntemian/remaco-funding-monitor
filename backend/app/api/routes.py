@@ -13,6 +13,7 @@ from app.models.database import get_db
 from app.models.funding_call import FundingCall, CallSource, CallStatus
 from app.models.company_profile import CompanyProfile, CompletedProject, StaffMember
 from app.models.match_result import MatchResult, MatchVerdict
+from app.models.feedback import Feedback
 from app.models.sector_filter import SectorFilter
 from app.services.pipeline import DailyPipeline
 
@@ -406,3 +407,46 @@ async def pipeline_status(db: AsyncSession = Depends(get_db)):
         "latest_call_date": latest_call.created_at.isoformat() if latest_call else None,
         "status": "healthy" if total_calls > 0 else "empty",
     }
+
+
+# ── Feedback ──────────────────────────────────────────────────────────────────
+
+class FeedbackIn(BaseModel):
+    name: str
+    type: str
+    message: str
+
+
+@router.post("/feedback")
+async def submit_feedback(data: FeedbackIn, db: AsyncSession = Depends(get_db)):
+    """Submit a feedback request."""
+    fb = Feedback(name=data.name, type=data.type, message=data.message)
+    db.add(fb)
+    await db.commit()
+    await db.refresh(fb)
+    return {"id": fb.id, "status": "received"}
+
+
+@router.get("/feedback")
+async def list_feedback(db: AsyncSession = Depends(get_db)):
+    """List all feedback submissions."""
+    result = await db.execute(select(Feedback).order_by(desc(Feedback.created_at)))
+    return [
+        {
+            "id": f.id, "name": f.name, "type": f.type,
+            "message": f.message, "reviewed": f.reviewed,
+            "date": f.created_at.strftime("%Y-%m-%d"),
+        }
+        for f in result.scalars().all()
+    ]
+
+
+@router.post("/feedback/{fb_id}/review")
+async def mark_reviewed(fb_id: int, db: AsyncSession = Depends(get_db)):
+    """Mark feedback as reviewed."""
+    fb = (await db.execute(select(Feedback).where(Feedback.id == fb_id))).scalar_one_or_none()
+    if not fb:
+        raise HTTPException(404, "Feedback not found")
+    fb.reviewed = True
+    await db.commit()
+    return {"reviewed": True}
