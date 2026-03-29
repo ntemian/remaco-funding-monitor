@@ -8,12 +8,12 @@ import './App.css';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <div className="app">
         <nav className="sidebar">
           <div className="logo">
             <div className="logo-box">
-              <img src="/remaco-logo.png" alt="REMACO" />
+              <img src={import.meta.env.BASE_URL + 'remaco-logo.png'} alt="REMACO" />
             </div>
             <h2>Funding Monitor</h2>
             <span className="subtitle">EU & Greek Calls Tracker</span>
