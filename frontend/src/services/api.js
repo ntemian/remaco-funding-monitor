@@ -1,7 +1,11 @@
 import axios from 'axios';
 
+const API_BASE = window.location.hostname === 'localhost'
+  ? '/api'
+  : 'https://ntemiss-mbp.tailddb317.ts.net:8443/api';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE,
   headers: { 'Content-Type': 'application/json' },
 });
 
